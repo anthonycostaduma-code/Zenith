@@ -25,7 +25,7 @@ export interface GlassCardProps {
 }
 
 const BASE =
-  "relative rounded-2xl border shadow-sm " +
+  "relative min-w-0 max-w-full rounded-2xl border shadow-sm " +
   "bg-white border-zinc-200 " +
   "dark:bg-zinc-900 dark:border-zinc-800";
 
@@ -69,5 +69,9 @@ export function GlassCard({
 
 /** Ligne interne compacte. */
 export function GlassRow({ children, className = "" }: { children: ReactNode; className?: string }) {
-  return <div className={`rounded-xl bg-zinc-100 px-3 py-2.5 dark:bg-zinc-800/60 ${className}`}>{children}</div>;
+  return (
+    <div className={`min-w-0 max-w-full rounded-xl bg-zinc-100 px-3 py-2.5 dark:bg-zinc-800/60 ${className}`}>
+      {children}
+    </div>
+  );
 }

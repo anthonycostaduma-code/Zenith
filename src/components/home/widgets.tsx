@@ -47,8 +47,8 @@ function WidgetTitle({
   Icon?: (p: React.SVGProps<SVGSVGElement>) => React.ReactElement;
 }) {
   return (
-    <div className="mb-3 flex items-center justify-between gap-2">
-      <span className="flex items-center gap-2">
+    <div className="mb-3 flex min-w-0 max-w-full items-center justify-between gap-2">
+      <span className="flex min-w-0 items-center gap-2">
         {Icon && (
           // Pastille d'icône : centrage parfait en hauteur et largeur.
           <span
@@ -58,7 +58,9 @@ function WidgetTitle({
             <Icon width={16} height={16} />
           </span>
         )}
-        <span className="text-[11px] font-bold uppercase tracking-[0.12em] text-[var(--muted)]">{children}</span>
+        <span className="min-w-0 truncate text-[11px] font-bold uppercase tracking-[0.12em] text-[var(--muted)]">
+          {children}
+        </span>
       </span>
       {href && (
         <Link href={href} className="link-open text-[11px]">
@@ -88,16 +90,16 @@ export function ClockWidget() {
   return (
     <GlassCard className="h-full p-6 sm:p-7">
       <div className="flex h-full flex-col justify-between gap-5">
-        <div className="flex flex-wrap items-start justify-between gap-4">
-          <div>
+        <div className="flex min-w-0 max-w-full flex-wrap items-start justify-between gap-4">
+          <div className="min-w-0 max-w-full">
             <p className="text-xs capitalize text-[var(--muted)]">
               {now?.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" }) ?? "…"}
             </p>
-            <h2 className="mt-1 text-2xl font-bold tracking-tight sm:text-3xl">
+            <h2 className="mt-1 break-words text-2xl font-bold tracking-tight sm:text-3xl">
               {greeting()}, {state.settings.userName}
             </h2>
           </div>
-          <div className="text-right">
+          <div className="shrink-0 text-right">
             <div className="font-mono text-4xl font-bold tabular-nums sm:text-5xl" style={{ letterSpacing: "-0.02em" }}>
               {now?.toLocaleTimeString("fr-FR", { hour12: false }) ?? "--:--:--"}
             </div>
@@ -106,10 +108,10 @@ export function ClockWidget() {
         </div>
 
         <div className="flex flex-wrap items-end justify-between gap-4">
-          <p className="max-w-lg text-sm italic leading-relaxed text-[var(--muted)]">
+          <p className="max-w-full text-sm italic leading-relaxed break-words text-[var(--muted)] sm:max-w-lg">
             « {quote.text} » — {quote.author}
           </p>
-          <p className="text-xs text-[var(--muted)]">
+          <p className="max-w-full text-xs text-[var(--muted)]">
             <span className="text-base font-bold text-[var(--text)]">{formatNum(score.score)}/20</span>
             <span className="mx-1.5 opacity-40">·</span>
             Socle {formatNum(score.base, 1)}/{BASE_MAX}

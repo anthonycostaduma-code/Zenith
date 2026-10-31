@@ -25,15 +25,15 @@ function Tabs({ title, tabs }: { title: string; tabs: PillarTab[] }) {
   );
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-wrap items-center justify-between gap-4">
-        <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">{title}</h1>
+    <div className="w-full max-w-full space-y-6">
+      <div className="flex w-full max-w-full flex-col items-start gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between sm:gap-4">
+        <h1 className="min-w-0 text-2xl font-bold tracking-tight sm:text-3xl">{title}</h1>
 
         {/* Segmented control façon iOS : une seule surface dépolie. */}
         <div
           role="tablist"
           aria-label={title}
-          className="inline-flex gap-1 rounded-full border border-zinc-200 bg-white p-1 dark:border-zinc-800 dark:bg-zinc-900"
+          className="no-scrollbar inline-flex max-w-full shrink-0 gap-1 overflow-x-auto rounded-full border border-zinc-200 bg-white p-1 dark:border-zinc-800 dark:bg-zinc-900"
         >
           {tabs.map((tab) => {
             const active = tab.id === current.id;
@@ -43,7 +43,7 @@ function Tabs({ title, tabs }: { title: string; tabs: PillarTab[] }) {
                 role="tab"
                 aria-selected={active}
                 onClick={() => select(tab.id)}
-                className="min-h-[38px] transform-gpu rounded-full px-4 text-sm font-semibold transition-all duration-200"
+                className="min-h-[38px] shrink-0 whitespace-nowrap transform-gpu rounded-full px-4 text-sm font-semibold transition-all duration-200"
                 style={{
                   background: active ? "var(--accent)" : "transparent",
                   color: active ? "var(--accent-contrast)" : "var(--muted)",

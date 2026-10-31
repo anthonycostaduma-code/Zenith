@@ -82,16 +82,16 @@ export default function CalendrierPage() {
   if (!ready) return <p className="muted pt-10 text-sm">Chargement…</p>;
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-wrap items-center justify-between gap-4">
+    <div className="w-full max-w-full space-y-6">
+      <div className="flex w-full max-w-full flex-wrap items-center justify-between gap-3">
         <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">Calendrier</h1>
-        <div className="flex items-center gap-2">
-          <div className="inline-flex gap-1 rounded-full border border-zinc-200 bg-white p-1 dark:border-zinc-800 dark:bg-zinc-900">
+        <div className="flex max-w-full flex-wrap items-center gap-2">
+          <div className="no-scrollbar inline-flex max-w-full shrink-0 gap-1 overflow-x-auto rounded-full border border-zinc-200 bg-white p-1 dark:border-zinc-800 dark:bg-zinc-900">
             {(["mois", "agenda"] as View[]).map((v) => (
               <button
                 key={v}
                 onClick={() => setView(v)}
-                className="min-h-[38px] transform-gpu rounded-full px-4 text-sm font-semibold capitalize transition-colors"
+                className="min-h-[38px] shrink-0 whitespace-nowrap transform-gpu rounded-full px-4 text-sm font-semibold capitalize transition-colors"
                 style={{
                   background: view === v ? "var(--accent)" : "transparent",
                   color: view === v ? "var(--accent-contrast)" : "var(--muted)",
@@ -101,7 +101,10 @@ export default function CalendrierPage() {
               </button>
             ))}
           </div>
-          <button className="btn btn-accent" onClick={() => setDraft(emptyDraft(selected))}>
+          <button
+            className="btn btn-accent shrink-0 whitespace-nowrap"
+            onClick={() => setDraft(emptyDraft(selected))}
+          >
             <IconPlus width={16} height={16} />
             Événement
           </button>
@@ -114,7 +117,7 @@ export default function CalendrierPage() {
             <button className="btn !min-h-[38px] !px-3" onClick={() => setCursor(new Date(year, month - 1, 1))}>
               ◀
             </button>
-            <h2 className="text-base font-semibold capitalize">
+            <h2 className="min-w-0 text-center text-base font-semibold capitalize">
               {cursor.toLocaleDateString("fr-FR", { month: "long", year: "numeric" })}
             </h2>
             <button className="btn !min-h-[38px] !px-3" onClick={() => setCursor(new Date(year, month + 1, 1))}>
@@ -168,15 +171,15 @@ export default function CalendrierPage() {
         </Card>
       ) : (
         <Card>
-          <div className="mb-4 flex items-center justify-between gap-3">
-            <div>
-              <h2 className="text-base font-semibold capitalize">{frDate(selected)}</h2>
+          <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+            <div className="min-w-0">
+              <h2 className="min-w-0 text-base font-semibold capitalize">{frDate(selected)}</h2>
               <p className="muted text-xs">
                 {dayEvents.length} événement{dayEvents.length > 1 ? "s" : ""}
               </p>
             </div>
             <input
-              className="input !w-auto"
+              className="input !w-auto max-w-full min-w-0 shrink-0"
               type="date"
               value={selected}
               onChange={(e) => e.target.value && setSelected(e.target.value)}

@@ -39,8 +39,8 @@ export function WidgetGrid({ widgets, editing, onToggleEditing }: Props) {
   const visible = ordered.filter((x) => x.item.enabled);
 
   return (
-    <div className="space-y-5">
-      <div className="flex items-center justify-end">
+    <div className="w-full max-w-full space-y-5">
+      <div className="flex max-w-full flex-wrap items-center justify-end">
         <button
           onClick={onToggleEditing}
           className="min-h-[38px] transform-gpu rounded-full border border-zinc-200 bg-white px-4 text-xs font-semibold transition-transform active:scale-95 dark:border-zinc-800 dark:bg-zinc-900"
@@ -52,8 +52,8 @@ export function WidgetGrid({ widgets, editing, onToggleEditing }: Props) {
 
       {editing && (
         <GlassCard className="p-5">
-          <div className="mb-4 flex items-center justify-between gap-3">
-            <div>
+          <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+            <div className="min-w-0">
               <h2 className="text-sm font-bold">Personnaliser la grille</h2>
               <p className="muted text-xs">Affichez, masquez et réordonnez vos widgets.</p>
             </div>
@@ -66,7 +66,7 @@ export function WidgetGrid({ widgets, editing, onToggleEditing }: Props) {
             {ordered.map(({ item, def }, index) => (
               <li
                 key={item.id}
-                className="flex items-center gap-2 rounded-2xl bg-[var(--glass-solid)] px-3 py-2"
+                className="flex min-w-0 max-w-full items-center gap-2 rounded-2xl bg-[var(--glass-solid)] px-3 py-2"
               >
                 <div className="flex flex-col">
                   <button

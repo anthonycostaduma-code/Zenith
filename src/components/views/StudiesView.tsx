@@ -44,7 +44,8 @@ export default function StudiesView() {
 
       <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,380px)]">
         <div className="space-y-4">
-          <Card halo className="flex flex-wrap items-center gap-6">
+          {/* Mobile : cercle centré au-dessus du texte — plus aucun texte tronqué. */}
+          <Card halo className="flex w-full max-w-full flex-col items-center gap-4 md:flex-row md:items-center md:gap-6">
             <Ring value={general.average ?? 0} max={20} size={156}>
               <div>
                 <div className="text-3xl font-extrabold">
@@ -53,12 +54,12 @@ export default function StudiesView() {
                 <div className="muted text-[11px] uppercase tracking-widest">/20</div>
               </div>
             </Ring>
-            <div className="min-w-[200px] flex-1">
+            <div className="w-full min-w-0 flex-1 text-center md:text-left">
               <CardTitle>Moyenne générale</CardTitle>
-              <div className="text-2xl font-extrabold" style={{ color: "var(--accent-ink)" }}>
+              <div className="break-words text-2xl font-extrabold" style={{ color: "var(--accent-ink)" }}>
                 {general.average === null ? "Aucune note" : mention(general.average)}
               </div>
-              <p className="muted mt-2 text-sm">
+              <p className="muted mx-auto mt-2 max-w-full text-sm md:mx-0">
                 Moyenne des matières, chacune pondérée par les coefficients de ses notes.
               </p>
             </div>
@@ -66,25 +67,28 @@ export default function StudiesView() {
 
           <Card>
             <CardTitle>Matières &amp; notes</CardTitle>
-            <div className="mb-4 flex flex-wrap items-center gap-2">
+            <div className="mb-4 flex w-full max-w-full flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center">
               <input
-                className="input flex-1"
+                className="input w-full min-w-0 flex-1"
                 placeholder="Ajouter une matière — ex : Algèbre linéaire"
                 value={subjectName}
                 onChange={(e) => setSubjectName(e.target.value)}
               />
-              <div className="flex items-center gap-1.5">
+              {/* Sélection des couleurs : défilement horizontal doux sur iPhone. */}
+              <div className="no-scrollbar flex w-full max-w-full items-center gap-1.5 overflow-x-auto overflow-y-hidden pb-2 scroll-smooth sm:w-auto">
                 {SWATCHES.map((c) => (
                   <button
                     key={c}
                     onClick={() => setSubjectColor(c)}
-                    className="h-7 w-7 rounded-full border-2"
+                    className="h-7 w-7 shrink-0 rounded-full border-2"
                     style={{ background: c, borderColor: subjectColor === c ? "#fff" : "transparent" }}
+                    aria-label={`Couleur ${c}`}
+                    aria-pressed={subjectColor === c}
                   />
                 ))}
               </div>
               <button
-                className="btn btn-accent"
+                className="btn btn-accent w-full shrink-0 sm:w-auto"
                 onClick={() => {
                   if (!subjectName.trim()) return;
                   addSubject(subjectName.trim(), subjectColor);
@@ -103,7 +107,7 @@ export default function StudiesView() {
                 const isOpen = openId === s.id;
                 return (
                   <div key={s.id} className="card-soft">
-                    <div className="flex items-center gap-3">
+                    <div className="flex min-w-0 max-w-full items-center gap-2 sm:gap-3">
                       <span className="h-3 w-3 shrink-0 rounded-full" style={{ background: s.color }} />
                       <div className="min-w-0 flex-1">
                         <div className="truncate font-bold">{s.name}</div>
@@ -112,7 +116,7 @@ export default function StudiesView() {
                         </div>
                       </div>
                       <span
-                        className="rounded-full px-3 py-1 text-sm font-extrabold"
+                        className="shrink-0 whitespace-nowrap rounded-full px-2.5 py-1 text-sm font-extrabold sm:px-3"
                         style={{ background: `${s.color}22`, color: s.color }}
                       >
                         {avg === null ? "—" : `${formatNum(avg)}/20`}
@@ -140,10 +144,10 @@ export default function StudiesView() {
                           />
                           <span className="text-sm font-bold">Moyenne manuelle</span>
                           {s.useManual && (
-                            <span className="flex items-center gap-2">
+                            <span className="flex min-w-0 max-w-full items-center gap-2">
                               <IconPencil width={15} height={15} />
                               <input
-                                className="input !w-24 !py-1.5"
+                                className="input !w-20 min-w-0 !py-1.5 sm:!w-24"
                                 type="number"
                                 step="0.01"
                                 min="0"
@@ -163,13 +167,18 @@ export default function StudiesView() {
 
                         <ul className="space-y-1.5">
                           {(s.notes ?? []).map((n) => (
-                            <li key={n.id} className="row-hover flex items-center gap-3 px-2 py-2 text-sm">
-                              <span className="w-16 font-extrabold" style={{ color: s.color }}>
+                            <li
+                              key={n.id}
+                              className="row-hover flex min-w-0 max-w-full flex-wrap items-center gap-x-2 gap-y-1 px-2 py-2 text-sm"
+                            >
+                              <span className="w-16 shrink-0 font-extrabold" style={{ color: s.color }}>
                                 {formatNum(Number(n.grade), 2)}/20
                               </span>
                               <span className="min-w-0 flex-1 truncate">{n.title}</span>
-                              <span className="muted text-xs">coeff. {n.coeff}</span>
-                              <span className="muted text-xs">{n.date ? frDate(n.date, { day: "2-digit", month: "2-digit", year: "2-digit" }) : ""}</span>
+                              <span className="muted shrink-0 whitespace-nowrap text-xs">coeff. {n.coeff}</span>
+                              <span className="muted shrink-0 whitespace-nowrap text-xs">
+                                {n.date ? frDate(n.date, { day: "2-digit", month: "2-digit", year: "2-digit" }) : ""}
+                              </span>
                               <button style={{ color: "var(--danger)" }} onClick={() => deleteGrade(s.id, n.id)}>
                                 <IconTrash width={15} height={15} />
                               </button>
@@ -270,10 +279,15 @@ function GradeForm({ onAdd }: { onAdd: (g: { title: string; grade: number; coeff
   const [coeff, setCoeff] = useState("1");
   const [date, setDate] = useState(dayKey());
   return (
-    <div className="grid gap-2 sm:grid-cols-[1fr_90px_90px_150px_auto]">
-      <input className="input" placeholder="Devoir 1..." value={title} onChange={(e) => setTitle(e.target.value)} />
+    <div className="grid w-full max-w-full grid-cols-2 gap-2 sm:grid-cols-[minmax(0,1fr)_90px_90px_150px_auto]">
       <input
-        className="input"
+        className="input col-span-2 min-w-0 sm:col-span-1"
+        placeholder="Devoir 1..."
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+      />
+      <input
+        className="input min-w-0"
         type="number"
         step="0.25"
         min="0"
@@ -283,7 +297,7 @@ function GradeForm({ onAdd }: { onAdd: (g: { title: string; grade: number; coeff
         onChange={(e) => setGrade(e.target.value)}
       />
       <input
-        className="input"
+        className="input min-w-0"
         type="number"
         step="0.5"
         min="0"
@@ -291,9 +305,14 @@ function GradeForm({ onAdd }: { onAdd: (g: { title: string; grade: number; coeff
         value={coeff}
         onChange={(e) => setCoeff(e.target.value)}
       />
-      <input className="input" type="date" value={date} onChange={(e) => setDate(e.target.value)} />
+      <input
+        className="input col-span-2 min-w-0 sm:col-span-1"
+        type="date"
+        value={date}
+        onChange={(e) => setDate(e.target.value)}
+      />
       <button
-        className="btn btn-accent whitespace-nowrap"
+        className="btn btn-accent col-span-2 w-full whitespace-nowrap sm:col-span-1 sm:w-auto"
         onClick={() => {
           const g = Number(grade);
           if (!title.trim() || Number.isNaN(g)) return;

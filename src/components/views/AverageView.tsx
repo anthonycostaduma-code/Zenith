@@ -106,7 +106,7 @@ export default function AverageView() {
       />
 
       <div className="grid gap-4 lg:grid-cols-[minmax(0,300px)_minmax(0,1fr)]">
-        <Card halo className="flex flex-col items-center !p-6">
+        <Card halo className="flex w-full max-w-full flex-col items-center !p-6 text-center">
           <Ring value={periodAvg} max={20} size={190} stroke={15} color={scoreColor(periodAvg)}>
             <div>
               <div className="text-4xl font-extrabold">{formatNum(periodAvg)}</div>
@@ -137,7 +137,7 @@ export default function AverageView() {
 
       <Card className="mt-4">
         <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
-          <div className="flex gap-2">
+          <div className="scroll-strip max-w-full">
             {(["semaine", "mois", "annee"] as View[]).map((v) => (
               <button
                 key={v}
@@ -151,8 +151,8 @@ export default function AverageView() {
               </button>
             ))}
           </div>
-          <div className="flex items-center gap-2">
-            <button className="btn !px-3 !py-1.5" onClick={() => setOffset((o) => o - 1)}>
+          <div className="flex max-w-full flex-wrap items-center gap-2">
+            <button className="btn !px-3 !py-1.5" onClick={() => setOffset((o) => o - 1)} aria-label="Période précédente">
               ◀
             </button>
             <button className="btn !px-3 !py-1.5" onClick={() => setOffset((o) => Math.min(0, o + 1))}>
@@ -171,15 +171,15 @@ export default function AverageView() {
       <div className="mt-4 grid gap-4 lg:grid-cols-2">
         <Card>
           <CardTitle>Objectif quotidien</CardTitle>
-          <div className="flex items-center gap-4">
-            <button className="btn !h-10 !w-10 !px-0 text-lg" onClick={() => updateSettings({ dailyPointsGoal: Math.max(1, goal - 1) })}>
+          <div className="flex w-full max-w-full flex-wrap items-center justify-center gap-4 sm:justify-start">
+            <button className="btn !h-10 !w-10 shrink-0 !px-0 text-lg" onClick={() => updateSettings({ dailyPointsGoal: Math.max(1, goal - 1) })}>
               −
             </button>
             <div className="text-center">
               <div className="text-4xl font-extrabold">{goal}</div>
               <div className="muted text-xs uppercase tracking-widest">points / jour</div>
             </div>
-            <button className="btn !h-10 !w-10 !px-0 text-lg" onClick={() => updateSettings({ dailyPointsGoal: Math.min(60, goal + 1) })}>
+            <button className="btn !h-10 !w-10 shrink-0 !px-0 text-lg" onClick={() => updateSettings({ dailyPointsGoal: Math.min(60, goal + 1) })}>
               +
             </button>
           </div>

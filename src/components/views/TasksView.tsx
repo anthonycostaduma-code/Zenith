@@ -77,11 +77,12 @@ export default function TasksView() {
           />
           <div className="mb-3">
             <div className="muted mb-2 text-[11px] font-extrabold uppercase tracking-widest">Priorité</div>
-            <div className="flex gap-2">
+            {/* 3 colonnes égales : les trois boutons occupent exactement la largeur. */}
+            <div className="grid w-full grid-cols-3 gap-2">
               {PRIORITIES.map((p) => (
                 <button
                   key={p}
-                  className="pill flex-1 justify-center"
+                  className="pill w-full min-w-0 justify-center !px-2"
                   style={
                     priority === p
                       ? { background: PRIORITY_COLOR[p], borderColor: PRIORITY_COLOR[p], color: "#10121a" }
@@ -101,7 +102,7 @@ export default function TasksView() {
                 Gérer
               </button>
             </div>
-            <div className="flex flex-wrap gap-2">
+            <div className="scroll-strip">
               {tags.map((t) => (
                 <button
                   key={t.id}
@@ -124,7 +125,7 @@ export default function TasksView() {
 
         <div className="space-y-4">
           <Card className="!py-4">
-            <div className="flex flex-wrap gap-2">
+            <div className="scroll-strip">
               {(
                 [
                   ["all", "Toutes"],
@@ -141,7 +142,7 @@ export default function TasksView() {
                 </button>
               ))}
             </div>
-            <div className="mt-3 flex flex-wrap gap-2">
+            <div className="scroll-strip mt-3">
               <button className={`pill ${tagFilter.length === 0 ? "pill-on" : ""}`} onClick={() => setTagFilter([])}>
                 Toutes catégories
               </button>
@@ -160,7 +161,7 @@ export default function TasksView() {
                 </button>
               ))}
             </div>
-            <div className="mt-3 flex flex-wrap gap-2">
+            <div className="scroll-strip mt-3">
               <button className={`pill ${prioFilter === "all" ? "pill-on" : ""}`} onClick={() => setPrioFilter("all")}>
                 Toutes priorités
               </button>
@@ -291,9 +292,13 @@ export default function TasksView() {
       <Modal open={manageOpen} onClose={() => setManageOpen(false)} title="Gérer les catégories">
         <ul className="space-y-2">
           {tags.map((t) => (
-            <li key={t.id} className="card-soft flex items-center gap-2">
+            <li key={t.id} className="card-soft flex min-w-0 max-w-full items-center gap-2">
               <input type="color" value={t.color} onChange={(e) => updateTag(t.id, { color: e.target.value })} />
-              <input className="input" value={t.name} onChange={(e) => updateTag(t.id, { name: e.target.value })} />
+              <input
+                className="input min-w-0 flex-1"
+                value={t.name}
+                onChange={(e) => updateTag(t.id, { name: e.target.value })}
+              />
               <button className="btn !px-3" style={{ color: "var(--danger)" }} onClick={() => deleteTag(t.id)}>
                 <IconTrash width={16} height={16} />
               </button>
@@ -313,11 +318,11 @@ export default function TasksView() {
               value={editing.title}
               onChange={(e) => setEditing({ ...editing, title: e.target.value })}
             />
-            <div className="flex gap-2">
+            <div className="grid w-full grid-cols-3 gap-2">
               {PRIORITIES.map((p) => (
                 <button
                   key={p}
-                  className="pill flex-1 justify-center"
+                  className="pill w-full min-w-0 justify-center !px-2"
                   style={
                     editing.priority === p
                       ? { background: PRIORITY_COLOR[p], borderColor: PRIORITY_COLOR[p], color: "#10121a" }
@@ -329,7 +334,7 @@ export default function TasksView() {
                 </button>
               ))}
             </div>
-            <div className="flex flex-wrap gap-2">
+            <div className="scroll-strip">
               {tags.map((t) => (
                 <button
                   key={t.id}
@@ -375,7 +380,7 @@ function TaskRow({
   onDelete: () => void;
 }) {
   return (
-    <li className="row-hover group flex min-h-[52px] items-center gap-3 px-2 py-2">
+    <li className="row-hover group flex min-h-[52px] min-w-0 max-w-full flex-wrap items-center gap-x-2 gap-y-2 px-1 py-2 sm:flex-nowrap sm:gap-3 sm:px-2">
       <button
         onClick={onToggle}
         className="grid h-5 w-5 shrink-0 place-items-center rounded-full border-2 text-[11px] font-black transition-colors"
@@ -389,13 +394,15 @@ function TaskRow({
         {task.done ? "✓" : ""}
       </button>
       <button
-        className={`min-w-0 flex-1 truncate text-left text-sm font-semibold ${task.done ? "line-through opacity-60" : ""}`}
+        className={`min-w-0 flex-1 basis-40 truncate text-left text-sm font-semibold ${task.done ? "line-through opacity-60" : ""}`}
         onClick={onEdit}
       >
         {task.title}
       </button>
-      {tagName && tagColor && <Badge color={tagColor}>{tagName}</Badge>}
-      <Badge color={PRIORITY_COLOR[task.priority]}>{PRIORITY_LABEL[task.priority]}</Badge>
+      <div className="ml-auto flex min-w-0 shrink-0 flex-wrap items-center justify-end gap-1.5">
+        {tagName && tagColor && <Badge color={tagColor}>{tagName}</Badge>}
+        <Badge color={PRIORITY_COLOR[task.priority]}>{PRIORITY_LABEL[task.priority]}</Badge>
+      </div>
       {/* Suppression directe : disponible quel que soit l'état (en cours, terminée, archivée). */}
       <button
         className="grid h-10 w-10 shrink-0 place-items-center rounded-full text-[var(--muted)] opacity-70 transition hover:text-[var(--danger)] hover:opacity-100"

@@ -103,7 +103,17 @@ export function AppShell({ children }: { children: ReactNode }) {
       {/* ---------------- Contenu ---------------- */}
       <div className="flex min-w-0 flex-1 flex-col">
         <MobileBar onSync={() => setSyncOpen(true)} onTheme={() => setThemeOpen(true)} />
-        <main className="mx-auto w-full max-w-5xl flex-1 px-5 pb-32 pt-6 sm:px-8 md:pb-16 md:pt-10">{children}</main>
+        {/*
+          * Marge interne de sécurité et largeur bornée :
+          *  - mobile : `w-full max-w-md mx-auto px-4` => le contenu ne touche
+          *    jamais les bords de l'iPhone ;
+          *  - `pb-28` (7rem) : la barre de navigation fixe ne masque plus la fin
+          *    de page (on y ajoute la safe-area iOS) ;
+          *  - `md:` : le layout large reprend ses aises à côté de la sidebar.
+          */}
+        <main className="mx-auto w-full max-w-md min-w-0 flex-1 px-4 pt-6 pb-[calc(7rem_+_env(safe-area-inset-bottom))] sm:max-w-2xl sm:px-6 sm:pt-8 md:max-w-5xl md:px-8 md:pb-16 md:pt-10">
+          {children}
+        </main>
         <MobileNav pathname={pathname} />
       </div>
 
@@ -168,7 +178,7 @@ function MobileBar({ onSync, onTheme }: { onSync: () => void; onTheme: () => voi
   const { status } = useZenith();
   const s = statusLabel(status);
   return (
-    <div className="sticky top-0 z-30 flex items-center justify-between border-b border-zinc-200 bg-zinc-50/95 px-5 py-3 md:hidden dark:border-zinc-800 dark:bg-zinc-950/95">
+    <div className="sticky top-0 z-30 flex w-full max-w-full items-center justify-between gap-2 border-b border-zinc-200 bg-zinc-50/95 px-4 py-3 md:hidden dark:border-zinc-800 dark:bg-zinc-950/95">
       <Link href="/" className="flex items-center gap-2">
         <ZenithMark size={26} />
         <span className="text-base font-bold">Zenith</span>
@@ -196,14 +206,14 @@ function MobileBar({ onSync, onTheme }: { onSync: () => void; onTheme: () => voi
 
 function MobileNav({ pathname }: { pathname: string }) {
   return (
-    <nav className="fixed inset-x-0 bottom-0 z-30 flex items-stretch gap-1 border-t border-zinc-200 bg-white px-2 pt-2 pb-[env(safe-area-inset-bottom)] md:hidden dark:border-zinc-800 dark:bg-zinc-900">
+    <nav className="fixed inset-x-0 bottom-0 z-30 flex w-full max-w-full items-stretch gap-0.5 overflow-hidden border-t border-zinc-200 bg-white px-1.5 pt-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] md:hidden dark:border-zinc-800 dark:bg-zinc-900">
       {NAV.map(({ href, label, Icon }) => {
         const active = isActive(pathname, href);
         return (
           <Link
             key={href}
             href={href}
-            className="flex min-h-[48px] flex-1 transform-gpu flex-col items-center justify-center gap-1 rounded-2xl py-1 text-[10px] font-semibold transition-all duration-200 active:scale-95"
+            className="flex min-h-[48px] min-w-0 flex-1 transform-gpu flex-col items-center justify-center gap-1 rounded-xl px-0.5 py-1 text-[10px] font-semibold leading-tight transition-all duration-200 active:scale-95"
             style={{
               color: active ? "var(--accent-ink)" : "var(--muted)",
               background: active ? "var(--accent-soft)" : "transparent",
@@ -234,9 +244,9 @@ function SyncPanel({ open, onClose }: { open: boolean; onClose: () => void }) {
           <div className="mb-2 text-[11px] font-bold uppercase tracking-widest text-[var(--muted)]">
             Votre code d&apos;espace
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex min-w-0 max-w-full flex-wrap items-center gap-2">
             <code
-              className="flex-1 select-all rounded-2xl px-3 py-3 text-base font-bold tracking-wider"
+              className="min-w-0 flex-1 basis-40 select-all break-all rounded-2xl px-3 py-3 text-sm font-bold tracking-wider sm:text-base"
               style={{ background: "var(--accent-soft)", color: "var(--accent-ink)" }}
             >
               {code || "…"}
@@ -291,7 +301,7 @@ function SyncPanel({ open, onClose }: { open: boolean; onClose: () => void }) {
           )}
         </div>
 
-        <div className="flex items-center justify-between border-t border-[var(--line)] pt-4">
+        <div className="flex flex-wrap items-center justify-between gap-3 border-t border-[var(--line)] pt-4">
           <div>
             <div className="flex items-center gap-2 font-semibold">
               <span className="h-2 w-2 rounded-full" style={{ background: s.color }} />

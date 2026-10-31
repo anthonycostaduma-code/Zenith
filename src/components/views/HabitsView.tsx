@@ -197,12 +197,12 @@ export default function HabitsView() {
           value={newName}
           onChange={(e) => setNewName(e.target.value)}
         />
-        <div className="mb-4 flex flex-wrap items-center gap-2">
+        <div className="no-scrollbar mb-4 flex max-w-full items-center gap-2 overflow-x-auto pb-2 scroll-smooth">
           {SWATCHES.map((c) => (
             <button
               key={c}
               onClick={() => setNewColor(c)}
-              className="h-8 w-8 rounded-full border-2"
+              className="h-8 w-8 shrink-0 rounded-full border-2"
               style={{ background: c, borderColor: newColor === c ? "#fff" : "transparent" }}
             />
           ))}
@@ -224,14 +224,14 @@ export default function HabitsView() {
       <Modal open={manageOpen} onClose={() => setManageOpen(false)} title="Gérer les catégories">
         <ul className="space-y-2">
           {cats.map((c) => (
-            <li key={c.id} className="card-soft flex items-center gap-2">
+            <li key={c.id} className="card-soft flex min-w-0 max-w-full items-center gap-2">
               <input
                 type="color"
                 value={c.color}
                 onChange={(e) => updateHabitCategory(c.id, { color: e.target.value })}
               />
               <input
-                className="input"
+                className="input min-w-0 flex-1"
                 value={c.name}
                 onChange={(e) => updateHabitCategory(c.id, { name: e.target.value })}
               />

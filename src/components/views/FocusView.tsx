@@ -100,7 +100,7 @@ export default function FocusView() {
       />
 
       <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,360px)]">
-        <Card halo className="flex flex-col items-center !p-7">
+        <Card halo className="flex w-full max-w-full flex-col items-center !p-5 sm:!p-7">
           <div className="mb-7 flex flex-wrap justify-center gap-2">
             {(Object.keys(MODE_LABEL) as Mode[]).map((m) => (
               <button
@@ -116,7 +116,7 @@ export default function FocusView() {
             ))}
           </div>
 
-          <div className="flex flex-wrap items-center justify-center gap-6">
+          <div className="flex w-full max-w-full flex-wrap items-center justify-center gap-4 sm:gap-6">
             <button className="btn !h-11 !w-11 !px-0 text-xl" onClick={() => changeDuration(-5)} aria-label="Moins 5 min">
               −
             </button>
@@ -133,7 +133,7 @@ export default function FocusView() {
             </button>
           </div>
 
-          <div className="mt-8 flex items-center gap-4">
+          <div className="mt-8 flex max-w-full flex-wrap items-center justify-center gap-4">
             <button className="btn !h-12 !w-12 !px-0" onClick={() => setRemaining(duration(mode))} aria-label="Réinitialiser">
               <IconReset width={20} height={20} />
             </button>

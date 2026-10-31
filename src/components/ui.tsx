@@ -16,7 +16,7 @@ export function Card({
   // `halo` est conservé pour compatibilité d'API. Toutes les cartes passent
   // désormais par GlassCard : un seul calque dépoli, jamais imbriqué.
   void halo;
-  return <GlassCard className={`fade-in p-5 ${className}`}>{children}</GlassCard>;
+  return <GlassCard className={`fade-in max-w-full min-w-0 p-5 ${className}`}>{children}</GlassCard>;
 }
 
 export function PageHeader({ title, subtitle }: { title: string; subtitle: string }) {
@@ -30,9 +30,11 @@ export function PageHeader({ title, subtitle }: { title: string; subtitle: strin
 
 export function CardTitle({ children, action }: { children: ReactNode; action?: ReactNode }) {
   return (
-    <div className="mb-4 flex items-center justify-between gap-3">
-      <h3 className="text-[13px] font-extrabold uppercase tracking-[0.14em] text-[var(--muted)]">{children}</h3>
-      {action}
+    <div className="mb-4 flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
+      <h3 className="min-w-0 text-[13px] font-extrabold uppercase leading-snug tracking-[0.14em] text-[var(--muted)]">
+        {children}
+      </h3>
+      {action && <div className="shrink-0">{action}</div>}
     </div>
   );
 }
@@ -56,8 +58,16 @@ export function Ring({
   const c = 2 * Math.PI * r;
   const pct = Math.max(0, Math.min(1, max === 0 ? 0 : value / max));
   return (
-    <div className="relative inline-grid place-items-center" style={{ width: size, height: size }}>
-      <svg width={size} height={size} className="-rotate-90">
+    <div
+      className="relative inline-grid max-w-full shrink-0 place-items-center"
+      style={{ width: size, maxWidth: "100%", aspectRatio: "1 / 1" }}
+    >
+      <svg
+        width={size}
+        height={size}
+        viewBox={`0 0 ${size} ${size}`}
+        className="h-full w-full max-w-full -rotate-90"
+      >
         <circle cx={size / 2} cy={size / 2} r={r} stroke="rgba(255,255,255,0.07)" strokeWidth={stroke} fill="none" />
         <circle
           cx={size / 2}
@@ -80,7 +90,7 @@ export function Ring({
 export function Badge({ color, children }: { color: string; children: ReactNode }) {
   return (
     <span
-      className="inline-flex items-center rounded-full px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-wider"
+      className="inline-flex max-w-full shrink-0 items-center whitespace-nowrap rounded-full px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-wider"
       style={{ background: `${color}22`, color, border: `1px solid ${color}44` }}
     >
       {children}
@@ -113,9 +123,9 @@ export function Modal({
 }) {
   if (!open) return null;
   return (
-    <div className="fixed inset-0 z-50 grid place-items-center bg-black/60 p-4" onClick={onClose}>
+    <div className="fixed inset-0 z-50 grid place-items-center overflow-hidden bg-black/60 p-4" onClick={onClose}>
       <div
-        className="card fade-in w-full max-w-lg max-h-[85vh] overflow-auto"
+        className="card fade-in max-h-[85dvh] w-full min-w-0 max-w-lg overflow-y-auto overscroll-contain"
         style={{ background: "var(--surface)" }}
         onClick={(e) => e.stopPropagation()}
       >
@@ -159,14 +169,14 @@ export function BarChart({ data, max = 20, height = 190 }: { data: Point[]; max?
   const [hover, setHover] = useState<number | null>(null);
   if (!data.length) return <p className="muted text-sm">Aucune donnée.</p>;
   return (
-    <div className="relative">
-      <div className="flex items-end gap-2" style={{ height }}>
+    <div className="no-scrollbar relative max-w-full overflow-x-auto overscroll-x-contain">
+      <div className="flex w-full min-w-full items-end gap-2" style={{ height }}>
         {data.map((d, i) => {
           const h = Math.max(3, (Math.max(0, d.value) / max) * (height - 26));
           return (
             <div
               key={`${d.label}-${i}`}
-              className="flex flex-1 flex-col items-center justify-end gap-2"
+              className="flex min-w-[10px] flex-1 flex-col items-center justify-end gap-2"
               onMouseEnter={() => setHover(i)}
               onMouseLeave={() => setHover(null)}
             >

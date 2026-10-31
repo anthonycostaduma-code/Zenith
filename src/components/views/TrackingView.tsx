@@ -85,14 +85,19 @@ export default function TrackingView() {
             <CardTitle>Nouvelle pesée</CardTitle>
             <p className="muted mb-3 text-sm">Une valeur par jour</p>
             <input
-              className="input mb-2"
+              className="input mb-2 min-w-0"
               type="number"
               step="0.1"
               placeholder="Poids (kg)"
               value={kg}
               onChange={(e) => setKg(e.target.value)}
             />
-            <input className="input mb-2" type="date" value={date} onChange={(e) => setDate(e.target.value)} />
+            <input
+              className="input mb-2 min-w-0"
+              type="date"
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
+            />
             <input
               className="input mb-3"
               placeholder="à jeun, après sport..."
@@ -169,7 +174,7 @@ export default function TrackingView() {
             {photos.length === 0 ? (
               <p className="muted text-sm">Aucune photo de progression.</p>
             ) : (
-              <div className="grid grid-cols-3 gap-3 sm:grid-cols-4">
+              <div className="grid w-full max-w-full grid-cols-3 gap-2 sm:grid-cols-4 sm:gap-3">
                 {photos.map((p) => (
                   <div
                     key={p.id}
@@ -215,11 +220,16 @@ export default function TrackingView() {
             ) : (
               <ul className="space-y-1.5">
                 {[...entries].reverse().map((e) => (
-                  <li key={e.id} className="row-hover flex items-center gap-3 px-2 py-2 text-sm">
-                    <span className="w-20 font-extrabold" style={{ color: "var(--accent-ink)" }}>
+                  <li
+                    key={e.id}
+                    className="row-hover flex min-w-0 max-w-full flex-wrap items-center gap-x-2 gap-y-1 px-2 py-2 text-sm"
+                  >
+                    <span className="w-20 shrink-0 font-extrabold" style={{ color: "var(--accent-ink)" }}>
                       {e.kg} kg
                     </span>
-                    <span className="muted w-32">{frDate(e.date, { day: "2-digit", month: "short", year: "2-digit" })}</span>
+                    <span className="muted w-28 shrink-0 text-xs sm:w-32 sm:text-sm">
+                      {frDate(e.date, { day: "2-digit", month: "short", year: "2-digit" })}
+                    </span>
                     <span className="muted min-w-0 flex-1 truncate">{e.note}</span>
                     <button style={{ color: "var(--danger)" }} onClick={() => deleteWeightEntry(e.id)}>
                       <IconTrash width={15} height={15} />
@@ -238,9 +248,15 @@ export default function TrackingView() {
             <div className="relative h-[60vh] w-full overflow-hidden rounded-2xl">
               <Image src={`/api/photos/${lightbox}`} alt="Photo" fill unoptimized className="object-contain" />
             </div>
-            <div className="mt-3 flex items-center justify-between gap-3">
-              <span className="muted text-sm">{photos.find((p) => p.id === lightbox)?.caption}</span>
-              <button className="btn" style={{ color: "var(--danger)" }} onClick={() => setConfirmDelete(lightbox)}>
+            <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
+              <span className="muted min-w-0 flex-1 break-words text-sm">
+                {photos.find((p) => p.id === lightbox)?.caption}
+              </span>
+              <button
+                className="btn shrink-0"
+                style={{ color: "var(--danger)" }}
+                onClick={() => setConfirmDelete(lightbox)}
+              >
                 <IconTrash width={16} height={16} /> Supprimer
               </button>
             </div>
@@ -287,7 +303,7 @@ export default function TrackingView() {
               </p>
             )}
 
-            <div className="flex justify-end gap-2">
+            <div className="flex flex-wrap justify-end gap-2">
               <button
                 className="btn"
                 disabled={deleting}
