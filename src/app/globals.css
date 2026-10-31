@@ -1,0 +1,304 @@
+@import "tailwindcss";
+
+/* Le thème est piloté par data-theme (auto/clair/sombre), pas par le média OS. */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+/* ------------------------------- Thème sombre ------------------------------- */
+:root,
+:root[data-theme="dark"] {
+  /* zinc-950 / zinc-900 / zinc-800 */
+  --bg-base: #09090b;
+  --bg: var(--bg-custom, var(--bg-base));
+  --surface: #18181b;
+  --surface-2: #27272a;
+  --hover: rgba(255, 255, 255, 0.05);
+  --line: #27272a;
+  --text: #fafafa;
+  --muted: #a1a1aa;
+  --accent: #c6f000;
+  --accent-ink: #c6f000;
+  --accent-soft: rgba(198, 240, 0, 0.14);
+  --accent-glow: rgba(198, 240, 0, 0.32);
+  --accent-contrast: #10121a;
+  --danger: #ff5c7a;
+  --warn: #ffb020;
+  --ok: #4be3a2;
+  /* Fond opaque des calques imbriqués (jamais de double backdrop-blur). */
+  --glass-solid: #27272a;
+}
+
+/* -------------------------------- Thème clair ------------------------------- */
+:root[data-theme="light"] {
+  /* zinc-50 / white / zinc-200 */
+  --bg-base: #fafafa;
+  --bg: var(--bg-custom, var(--bg-base));
+  --surface: #ffffff;
+  --surface-2: #f4f4f5;
+  --hover: rgba(0, 0, 0, 0.04);
+  --line: #e4e4e7;
+  --text: #18181b;
+  --muted: #71717a;
+  --danger: #d83a5c;
+  --warn: #b87400;
+  --ok: #17976a;
+  --glass-solid: #f4f4f5;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+html,
+body {
+  background: var(--bg);
+  color: var(--text);
+}
+
+body {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Inter, Roboto, sans-serif;
+  min-height: 100vh;
+  min-height: 100dvh;
+  overscroll-behavior-x: none;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--line);
+  border-radius: 999px;
+}
+
+/* --------------------------- Surfaces (épurées) ---------------------------- */
+
+/* Carte discrète : pas de bordure lourde ni d'ombre marquée. */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 16px; /* rounded-2xl */
+  padding: 20px;
+  position: relative;
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); /* shadow-sm */
+}
+
+.card-soft {
+  background: var(--surface-2);
+  border-radius: 16px;
+  padding: 16px;
+}
+
+/* Conteneur "canvas" : aucune boîte, seulement du rythme vertical. */
+.plain {
+  background: transparent;
+}
+
+.divide-line > * + * {
+  border-top: 1px solid var(--line);
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 999px;
+  padding: 8px 14px;
+  min-height: 36px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+  background: var(--surface-2);
+  border: 1px solid transparent;
+  transition: all 0.16s ease;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.pill:hover {
+  color: var(--text);
+}
+.pill-on {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-contrast);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-radius: 999px;
+  padding: 10px 18px;
+  min-height: 44px;
+  font-weight: 600;
+  font-size: 14px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--text);
+  cursor: pointer;
+  transition: transform 0.12s ease, background 0.18s ease, opacity 0.18s ease;
+}
+.btn:hover {
+  background: var(--hover);
+}
+.btn:active {
+  transform: scale(0.97);
+}
+.btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+.btn-accent {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-contrast);
+}
+.btn-accent:hover {
+  background: var(--accent);
+  filter: brightness(1.06);
+}
+
+.input,
+.select,
+.textarea {
+  width: 100%;
+  min-height: 44px;
+  background: var(--surface-2);
+  border: 1px solid transparent;
+  border-radius: 14px;
+  padding: 11px 14px;
+  color: var(--text);
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.16s ease, box-shadow 0.16s ease;
+}
+.input::placeholder {
+  color: var(--muted);
+}
+.input:focus,
+.select:focus,
+.textarea:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+.select option {
+  background: var(--surface);
+  color: var(--text);
+}
+
+.title-xl {
+  font-size: clamp(28px, 4vw, 40px);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.06;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.link-open {
+  color: var(--accent-ink);
+  font-size: 12px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.link-open:hover {
+  opacity: 0.75;
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease both;
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.row-hover {
+  transition: background 0.16s ease;
+  border-radius: 14px;
+}
+.row-hover:hover {
+  background: var(--hover);
+}
+
+input[type="color"] {
+  -webkit-appearance: none;
+  appearance: none;
+  border: none;
+  background: none;
+  width: 44px;
+  height: 44px;
+  cursor: pointer;
+}
+input[type="color"]::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+input[type="color"]::-webkit-color-swatch {
+  border: 1px solid var(--line);
+  border-radius: 14px;
+}
+
+@media (max-width: 767px) {
+  .input,
+  .select,
+  .textarea {
+    font-size: 16px;
+  }
+}
+
+/* ---------------------- Transition de page (App Router) --------------------- */
+
+/*
+ * Fade + léger slide up, courbe « ease-out-expo » iOS.
+ * Uniquement opacity/transform : aucun reflow, aucun layout shift.
+ */
+@keyframes routeEnter {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 4px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.route-transition {
+  animation: routeEnter 200ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  transform-origin: top center;
+  /* Évite le crénelage du texte pendant la composition GPU. */
+  backface-visibility: hidden;
+}
+
+/* Frémissement iOS du mode édition (transform seul => animé par le GPU). */
+@keyframes wiggle {
+  0%,
+  100% {
+    transform: rotate(-0.5deg);
+  }
+  50% {
+    transform: rotate(0.5deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
